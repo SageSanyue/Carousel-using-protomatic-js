@@ -8,9 +8,9 @@
     #wrap{
       position: relative;
       overflow: hidden;
-      width: 780px;
+      width: 800px;
       height: 200px;
-      border: 1px solid blue;
+/*       border: 1px solid blue; */
       margin-left: auto;
       margin-right: auto;
     }
@@ -57,18 +57,18 @@
 <body>
   <div id="wrap">
     <div id="list" style="left: -200px;">
-        <img width="200" src="https://picsum.photos/200/200/?image=1" alt="5"/>
-        <img width="200" src="https://i.loli.net/2018/04/01/5ac0515dd6f92.jpg" alt="1"/>
-        <img width="200" src="https://i.loli.net/2018/04/01/5ac0519d9ec14.jpg" alt="2"/>
-        <img width="200" src="http://hfq-decorate-test.oss-cn-beijing.aliyuncs.com/common%2F10974%2F20180503164711.png?OSSAccessKeyId=LTAI5ZTWfPYQuSK3&Expires=1557747406&Signature=FivQu0TlQW3Cobc7P4QkPcs24Ls%3D" alt="3"/>
-        <img width="200" src="https://canna-pet.com/wp-content/uploads/2017/06/20-longest-living-dog-breeds_canna-pet-e1498599846169.jpg" alt="4"/>
-        <img width="200" src="https://picsum.photos/200/200/?image=1" alt="5"/>
-        <img width="200" src="https://i.loli.net/2018/04/01/5ac0515dd6f92.jpg" alt="1"/>
-        <img width="200" src="https://i.loli.net/2018/04/01/5ac0519d9ec14.jpg" alt="2"/>
-        <img width="200" src="http://hfq-decorate-test.oss-cn-beijing.aliyuncs.com/common%2F10974%2F20180503164711.png?OSSAccessKeyId=LTAI5ZTWfPYQuSK3&Expires=1557747406&Signature=FivQu0TlQW3Cobc7P4QkPcs24Ls%3D" alt="3"/>
-        <img width="200" src="https://canna-pet.com/wp-content/uploads/2017/06/20-longest-living-dog-breeds_canna-pet-e1498599846169.jpg" alt="4"/>
-        <img width="200" src="https://picsum.photos/200/200/?image=1" alt="5"/>
-        <img width="200" src="https://i.loli.net/2018/04/01/5ac0515dd6f92.jpg" alt="1"/>
+        <img src="https://picsum.photos/200/200/?image=1" alt="5"/>
+        <img src="https://i.loli.net/2018/04/01/5ac0515dd6f92.jpg" alt="1"/>
+        <img src="https://i.loli.net/2018/04/01/5ac0519d9ec14.jpg" alt="2"/>
+        <img src="https://i.loli.net/2018/10/22/5bcd3f03dcb09.png" alt="3"/>
+        <img src="https://canna-pet.com/wp-content/uploads/2017/06/20-longest-living-dog-breeds_canna-pet-e1498599846169.jpg" alt="4"/>
+        <img src="https://i.loli.net/2018/10/22/5bcd3ede851d2.png" alt="5"/>
+        <img src="https://i.loli.net/2018/04/01/5ac0515dd6f92.jpg" alt="1"/>
+        <img src="https://i.loli.net/2018/04/01/5ac0519d9ec14.jpg" alt="2"/>
+        <img src="https://i.loli.net/2018/10/22/5bcd3f03dcb09.png" alt="3"/>
+        <img src="https://canna-pet.com/wp-content/uploads/2017/06/20-longest-living-dog-breeds_canna-pet-e1498599846169.jpg" alt="4"/>
+        <img src="https://i.loli.net/2018/10/22/5bcd3ede851d2.png" alt="5"/>
+        <img src="https://i.loli.net/2018/04/01/5ac0515dd6f92.jpg" alt="1"/>
     </div>
     <span id="prev" class="arrow"><</span>
     <span id="next" class="arrow">></span>
@@ -83,7 +83,7 @@
         var animated = false
 
         function animate(offset){
-          var speed = offset/30
+          var speed = offset/20
           animated = true
           var newLeft = parseInt(list.style.left) + offset
           function move(){
@@ -93,9 +93,9 @@
             } else {
               animated = false
               if (newLeft > -200) {
-                list.style.left = -1200 + "px"
+                list.style.left = -1000 + "px"
               }
-              if (newLeft < -1200) {
+              if (newLeft < -1000) {
                 list.style.left = -200 + "px"
               }
             }
