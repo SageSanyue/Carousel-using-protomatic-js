@@ -8,4 +8,4 @@
 一屏4张的5图轮播：https://sagesanyue.github.io/Carousel-using-protomatic-js/fourPictures.html  
 3.更好的滑动版轮播(适用于生产-后台接口返图片类)：https://sagesanyue.github.io/Carousel-using-protomatic-js/betterCarousel.html 
   
-滑动加动态添加对应序号版：https://sagesanyue.github.io/Carousel-using-protomatic-js/betterCarousel.html
+滑动加动态添加对应序号版：https://sagesanyue.github.io/Carousel-using-protomatic-js/dynamic.html
