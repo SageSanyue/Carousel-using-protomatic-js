@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <style>
+    #wrap{
+        position: relative;
+        overflow: hidden;
+        width: 400px;
+        height: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        border: 3px solid #333;
+    }
+    #list{   
+        position: absolute;
+        width: 500%;
+        height: 400px;
+
+    }
+    #list img{
+        float: left;
+        width: 400px;
+        height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <div id="list">
+        <img src="https://picsum.photos/200/200/?image=1" alt="1"/>
+        <img src="https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2575421468,2000745319&fm=173&app=25&f=JPEG?w=218&h=146&s=5FBFB3E2C2637CBF8736A03D03009047" alt="2"/>
+        <img src="https://i.loli.net/2018/04/01/5ac0519d9ec14.jpg" alt="3"/>
+        <img src="https://m.baidu.com/static/index/plus/plus_logo_web.png" alt="4"/>   
+    </div>
+  </div>
+  <script>
+    var list = document.getElementById("list")
+    var wrap = document.getElementById("wrap")
+    var animated = false
+    var ulLis = list.children
+    var liWidth = list.children[0].offsetWidth
+    console.log('liWidth', liWidth)
+    list.appendChild(list.children[0].cloneNode(true))
+    var timer = null
+    var key = 0
+    timer = setInterval(autoplay,2000)
+    function autoplay(){
+        key++
+        if(key > ulLis.length-1){
+            list.style.left = 0
+            key = 1
+        }
+        animate(list, -key*liWidth)
+    }
+
+    function animate(obj, target) {
+        console.log(57, target)
+        console.log(60, obj.offsetLeft)
+        clearInterval(obj.timer)
+        var speed = obj.offsetLeft < target ? 10 : -10
+        console.log('speed', speed)
+        obj.timer = setInterval(function(){
+            var result = target - obj.offsetLeft;
+            obj.style.left = obj.offsetLeft + speed + "px";
+            if (Math.abs(result) <= Math.abs(speed)) {
+                clearInterval(obj.timer);
+                obj.style.left = target + "px";
+            }
+        },10);
+    }
+  </script>
+</body>
+</html>
