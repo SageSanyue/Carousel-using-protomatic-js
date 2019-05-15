@@ -9,7 +9,7 @@
         position: relative;
         overflow: hidden;
         width: 400px;
-        height: 400px;
+        height: 200px;
         margin-left: auto;
         margin-right: auto;
         border: 3px solid #333;
@@ -17,13 +17,33 @@
     #list{   
         position: absolute;
         width: 500%;
-        height: 400px;
+        height: 200px;
 
     }
     #list img{
         float: left;
         width: 400px;
         height: 100%;
+    }
+    #buttons{
+        position: absolute;
+        top: 220px;
+        left: 47%;
+        width: 100px;
+        height: 10px;
+    }
+    #buttons span{
+        float: left;
+        width: 10px;
+        height: 10px;
+        margin-right: 5px;
+        cursor: pointer;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        background: #333;
+    }
+    #buttons .on{
+        background: orangered;
     }
   </style>
 </head>
@@ -36,6 +56,12 @@
         <img src="https://m.baidu.com/static/index/plus/plus_logo_web.png" alt="4"/>   
     </div>
   </div>
+  <div id="buttons">
+        <span index="1" class="on"></span>
+        <span index="2"></span>
+        <span index="3"></span>
+        <span index="4"></span>
+  </div>
   <script>
     var list = document.getElementById("list")
     var wrap = document.getElementById("wrap")
@@ -44,32 +70,51 @@
     var liWidth = list.children[0].offsetWidth
     console.log('liWidth', liWidth)
     list.appendChild(list.children[0].cloneNode(true))
-    var timer = null
+    var timer
     var key = 0
-    timer = setInterval(autoplay,2000)
+    var buttons = document.getElementById("buttons").getElementsByTagName("span")
+
+    function animate(obj, target) {
+        console.log('target', target)
+        console.log('offsetLeft', obj.offsetLeft)
+        clearInterval(obj.t)
+        var speed = obj.offsetLeft < target ? 10 : -10
+        console.log('speed', speed)
+        obj.t = setInterval(function(){
+            var result = target - obj.offsetLeft;
+            console.log('result', result, Math.abs(result))
+            obj.style.left = obj.offsetLeft + speed + "px";
+            console.log('obj.style.left', obj.style.left)
+            if (Math.abs(result) <= Math.abs(speed)) {
+                clearInterval(obj.t);
+                obj.style.left = target + "px";
+                console.log('obj.style.left', obj.style.left)
+            }
+        },10)
+    }
+ 
     function autoplay(){
+        shownButton()
         key++
         if(key > ulLis.length-1){
             list.style.left = 0
             key = 1
         }
         animate(list, -key*liWidth)
+        // console.log('key', key)
+        if (key !== 4) {
+            buttons[key].className = 'on'
+        } else {
+            buttons[0].className = 'on'
+        }
     }
 
-    function animate(obj, target) {
-        console.log(57, target)
-        console.log(60, obj.offsetLeft)
-        clearInterval(obj.timer)
-        var speed = obj.offsetLeft < target ? 10 : -10
-        console.log('speed', speed)
-        obj.timer = setInterval(function(){
-            var result = target - obj.offsetLeft;
-            obj.style.left = obj.offsetLeft + speed + "px";
-            if (Math.abs(result) <= Math.abs(speed)) {
-                clearInterval(obj.timer);
-                obj.style.left = target + "px";
-            }
-        },10);
+    timer = setInterval(autoplay, 2000)
+
+    function shownButton(){
+        for (var i = 0; i < buttons.length ; i++) {
+            buttons[i].className = ''
+        }
     }
   </script>
 </body>
