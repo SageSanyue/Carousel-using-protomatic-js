@@ -1,6 +1,6 @@
 # Carousel-using-protomatic-js
 原生js实现轮播图
-1.简单预览：https://sagesanyue.github.io/Carousel-using-protomatic-js/carrousel.html  
+1.简单预览：https://sagesanyue.github.io/Carousel-using-protomatic-js/carousel.html  
 
 2.滑动版预览：https://sagesanyue.github.io/Carousel-using-protomatic-js/slide.html  
 
