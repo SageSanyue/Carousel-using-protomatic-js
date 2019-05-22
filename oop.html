@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>图片轮播组件</title>
+  <style>
+    #wrap{
+        position: relative;
+        overflow: hidden;
+        width: 400px;
+        height: 200px;
+        margin-left: auto;
+        margin-right: auto;
+        border: 3px solid #333;
+    }
+    #list{   
+        position: absolute;
+        width: 500%;
+        height: 200px;
+
+    }
+    #list img{
+        float: left;
+        width: 400px;
+        height: 100%;
+    }
+    #buttons{
+        position: absolute;
+        top: 220px;
+        left: 46%;
+        width: 200px;
+        height: 10px;
+    }
+    #buttons span{
+        float: left;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        cursor: pointer;
+        border: 1px solid #fff;
+        color: #fff;
+        border-radius: 50%;
+        background: #333;
+        text-align:center;
+    }
+    #buttons .on{
+       background: red;
+       color: #fff;
+    }
+    .arrow{
+      font-size: 36px;
+      font-weight: bold;
+      line-height: 39px;
+      position: absolute;
+      z-index: 2;
+      top: 100px;
+      /* display: none; */
+      width: 40px;
+      height: 40px;  
+      cursor: pointer;
+      text-align: center;
+      color: #fff;
+      background-color: #a8a8a8;
+      border-radius: 20px;
+    }
+    .arrow:hover{
+      background-color: #4a4a4a;
+    }
+    #prev{
+      left: 0;
+    }
+    #next{
+      right: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- 图片容器 -->
+  <div id="wrap">
+    <div id="list">
+        <img src="https://picsum.photos/200/200/?image=1" alt="1"/>
+        <img src="https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2575421468,2000745319&fm=173&app=25&f=JPEG?w=218&h=146&s=5FBFB3E2C2637CBF8736A03D03009047" alt="2"/>
+        <img src="https://i.loli.net/2018/04/01/5ac0519d9ec14.jpg" alt="3"/>
+        <img src="https://m.baidu.com/static/index/plus/plus_logo_web.png" alt="4"/>
+    </div>
+    <span id="prev" class="arrow"><</span>
+    <span id="next" class="arrow">></span>
+  </div>
+  <!-- 底部序号标识 -->
+  <div id="buttons"></div>
+
+  <script>
+      function Carousel(list) {
+          this.init(list)
+          this.bind()
+          this.play()
+          this.spanClick()
+      }
+
+      Carousel.prototype = {
+          constructor: Carousel,
+          init: function(list) {
+            //   console.log('this', this)
+              this.list = document.getElementById(list) // 获取图片集DOM
+            //   console.log('this.list', this.list)
+              this.wrap = document.getElementById("wrap") // 获取图片集容器DOM
+              this.ulLis = this.list.children // 获取所有图片
+              this.liWidth = this.list.children[0].offsetWidth // 获取第1张图片的布局宽度width(border+padding+width)
+                
+              this.list.style.left = - this.liWidth + 'px'
+              this.list.appendChild(this.list.children[0].cloneNode(true)) // 深克隆第一张图片到图片集DOM最后面
+              this.list.insertBefore(this.list.children[this.list.children.length-2].cloneNode(true), this.list.childNodes[0]) // 深克隆最后一张图片到图片集DOM最前面
+                
+              this.buttons = document.getElementById("buttons") // 获取序号容器DOM
+              this.buttonsLis = this.buttons.children // 创建序号容器的子elements
+              this.prev = document.getElementById("prev")
+              this.next = document.getElementById("next")
+
+              this.timer2 = null
+              this.animated = false
+              this.index = 1
+          },
+          bind: function() {
+              var _this = this
+              this.dynamicOrder()
+              this.prev.onclick = function(){
+                _this.prevPlay()
+              }
+              this.next.onclick = function(){
+                _this.nextPlay()
+              }
+
+              this.wrap.onmouseover = function() {
+                  _this.stop()
+              }
+              this.wrap.onmouseout = function() {
+                  _this.play()
+              }
+          },
+          dynamicOrder: function() {
+            for (let i = 0; i < this.ulLis.length - 2; i++) { // 根据所有图片总张数来创建对应数量的数字span并放入到序号容器buttons里
+                var span = document.createElement("span")
+                span.innerHTML = i + 1
+                span.setAttribute('index', i + 1)
+                this.buttons.appendChild(span)
+            }
+            this.buttons.children[0].className = "on" // 序号容器buttons里的第1个数字span[0]默认加上class激活状态on
+          },
+          spanClick: function() {
+            var _this = this
+            for (let i = 0; i < this.buttonsLis.length; i++) {
+                this.buttonsLis[i].onclick = function () {
+                    if (this.className == "on") {
+                        return
+                    }
+                    var clickIndex = parseInt(this.getAttribute("index"))
+                    var offset = -_this.liWidth * (clickIndex - _this.index)
+                    if (!_this.animated) {
+                        _this.autoplay(offset)
+                    }
+                    _this.index = clickIndex
+                    _this.showNumber()
+                }
+            }
+          },
+          autoplay: function(offset) {
+            this.showNumber()
+
+            var speed = offset/20
+            this.animated = true
+            var newLeft = parseInt(this.list.style.left) + offset
+
+            var _this = this
+            function animate() {
+                if ((speed > 0 && parseInt(_this.list.offsetLeft) < newLeft) || (speed < 0 && parseInt(_this.list.offsetLeft) > newLeft)) {
+                    _this.list.style.left = _this.list.offsetLeft + speed + 'px'
+                    setTimeout(animate, 10)
+                } else {
+                    _this.animated = false
+                    if (newLeft > -_this.liWidth) {
+                        _this.list.style.left = -_this.liWidth*(_this.ulLis.length-2) + "px"
+                    }
+                    if (newLeft < -_this.liWidth*(_this.ulLis.length-2)) {
+                        _this.list.style.left = -_this.liWidth + "px"
+                    }
+                }
+            }
+            animate()
+          },
+        //   animate: function() {
+        //     if ((this.speed > 0 && parseInt(this.list.offsetLeft) < this.newLeft) || (this.speed < 0 && parseInt(this.list.offsetLeft) > this.newLeft)) {
+        //         this.list.style.left = this.list.offsetLeft + speed + 'px'
+        //         setTimeout(this.animate, 10)
+        //     } else {
+        //         this.animated = false
+        //         if (this.newLeft > -this.liWidth) {
+        //             this.list.style.left = -this.liWidth*(this.ulLis.length-2) + "px"
+        //         }
+        //         if (this.newLeft < -this.liWidth*(this.ulLis.length-2)) {
+        //             this.list.style.left = -this.liWidth + "px"
+        //         }
+        //     }
+        //   },
+          prevPlay: function() {
+            if (!this.animated) {
+                if (this.index == 1) {
+                    this.index = this.ulLis.length - 2
+                } else {
+                    this.index -= 1
+                }
+                this.autoplay(this.liWidth)
+            }
+          },
+          nextPlay: function() {
+            if (!this.animated) {
+                if (this.index == this.ulLis.length - 2) {
+                    this.index = 1
+                } else {
+                    this.index += 1
+                }
+                this.autoplay(-this.liWidth)
+            }
+          },
+          play: function() {
+            var _this = this
+            this.timer2 = setInterval(function(){
+                _this.nextPlay()
+            }, 2000)
+          },
+          stop: function() {
+            clearInterval(this.timer2)
+          },
+          showNumber: function() {
+            for (var i = 0; i < this.buttonsLis.length ; i++) {
+                if( this.buttonsLis[i].className == 'on'){
+                    this.buttonsLis[i].className = ''
+                    break
+                }
+            }
+            this.buttonsLis[this.index - 1].className = "on"
+          }
+      }
+      
+      var demo1 = new Carousel('list')
+
+  </script>
+</body>
+</html>
